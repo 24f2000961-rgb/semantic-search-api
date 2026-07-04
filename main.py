@@ -19,7 +19,7 @@ def cosine_similarity(a, b):
     b = np.array(b)
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
-@app.post("/")
+@app.post("/rank")
 async def rank(req: Request):
     client = get_client()   # <-- IMPORTANT FIX
 
