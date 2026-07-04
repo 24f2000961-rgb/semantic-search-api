@@ -4,14 +4,15 @@ from openai import OpenAI
 import numpy as np
 import os
 
-client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
-
 app = FastAPI()
 
 class Request(BaseModel):
     query_id: str
     query: str
     candidates: list[str]
+
+def get_client():
+    return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def cosine_similarity(a, b):
     a = np.array(a)
@@ -20,6 +21,8 @@ def cosine_similarity(a, b):
 
 @app.post("/")
 async def rank(req: Request):
+    client = get_client()   # <-- IMPORTANT FIX
+
     texts = [req.query] + req.candidates
 
     response = client.embeddings.create(
